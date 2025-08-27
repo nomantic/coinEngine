@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Spring Boot Application Service
+  coin-engine:
+    build: .
+    image: coin_engine:1.0
+    # Container names must be lowercase
+    container_name: coin-engine-app
+    depends_on:
+      # This ensures the database starts before the application
+      - coin-engine-db
+    ports:
+      # Map host port to container port
+      - '8080:8080'
+    environment:
+      # Override application.properties for the container environment
+      # The hostname 'coin-engine-db' matches the database service name
+      SPRING_DATASOURCE_URL: jdbc:mysql://coin-engine-db:3306/coin_engine?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+  # MySQL Database Service
+  coin-engine-db:
+    image: mysql:8.0
+    # Container names must be lowercase
+    container_name: coin-engine-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: coin_engine
+    ports:
+      # Map host port to container port
+      - '3307:3306'
+    volumes:
+      # Persist database data
+      - coin-engine-db-data:/var/lib/mysql
+
+
+
+# Define the named volume for data persistence
+volumes:
+  coin-engine-db-data:
