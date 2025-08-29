@@ -12,6 +12,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccountNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> handleAccountNotFound(AccountNotFoundException exception) {
         ApiResponse<String> response = new ApiResponse<>(false, exception.getMessage(), null);
-        return new ResponseEntity(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiResponse<String>> handleIllegalStateException(IllegalStateException exception) {
+        ApiResponse<String> response = new ApiResponse<>(false, exception.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<String>> handleIllegalArgumentException(IllegalArgumentException exception) {
+        ApiResponse<String> response = new ApiResponse<>(false, exception.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }
